@@ -1,61 +1,65 @@
+# Comentários dos códigos do Core.ts e da API feitos em sala
+### CORE.TS
 ```typescript
 //CORE.TS
-const jsonFilePath = __dirname + '/data.temp.json';
-const list: string[] = await loadFromFile();
+const jsonFilePath = __dirname + '/data.temp.json';//variavel que fornece o caminho 
+const list: string[] = await loadFromFile();//recebe uma lista do loadfile
 
-
+//função assincrona 
 async function loadFromFile() {
-  try {
-    const file = Bun.file(jsonFilePath);
-    const content = await file.text();
-    return JSON.parse(content) as string[];
+  try {//metodo
+    const file = Bun.file(jsonFilePath);//usa funçaõ do bun para referenciar
+    const content = await file.text();//le o arquivo
+    return JSON.parse(content) as string[];//converte o JSON em um array de string
   } catch (error: any) {
-    if (error.code === 'ENOENT')
-      return [];
-    throw error;
+    if (error.code === 'ENOENT')//caso tenha erro
+      return [];//retorna lista vazia
+    throw error;//lança o erro
   }
 }
 
-
+//função de salvar o arquivo
 async function saveToFile() {
   try {
-    await Bun.write(jsonFilePath, JSON.stringify(list));
+    await Bun.write(jsonFilePath, JSON.stringify(list));//função do Bun, por meio do filepath monta uma lista em JSON do que tem no arquivo
   } catch (error: any) {
-   throw new Error("Erro ao salvar os dados no arquivo: " + error.message);
+   throw new Error("Erro ao salvar os dados no arquivo: " + error.message);//mensagem que aparece caso aconteça um erro
   }
 }
 
-
+//função de adicionar itens
 async function addItem(item: string) {
-  list.push(item);
-  await saveToFile();
+  list.push(item);//adiciona um item na lista
+  await saveToFile();//salva as mudanças
 }
 
-
+//função para mostrar os itens
 async function getItems() {
-  return list;
+  return list;//retorna a ultima lista salva
 }
 
-
+//função que altera os valores de um item
 async function updateItem(index: number, newItem: string) {
-  if (index < 0 || index >= list.length)
-    throw new Error("Index fora dos limites");
-  list[index] = newItem;
-  await saveToFile();
+  if (index < 0 || index >= list.length)//verifica se o index do item é valido
+    throw new Error("Index fora dos limites");//mensagem caso não seja
+  list[index] = newItem;//muda o valor do item selecionada, conforme index
+  await saveToFile();//salva mudanças
 }
 
-
+//função de remover itens
 async function removeItem(index: number) {
-  if (index < 0 || index >= list.length)
-    throw new Error("Index fora dos limites");
-  list.splice(index, 1);
-  await saveToFile();
+  if (index < 0 || index >= list.length)//verifica se o index do item é valido
+    throw new Error("Index fora dos limites");//mensagem caso não seja
+  list.splice(index, 1);//apaga uma item da lista conforme index
+  await saveToFile();//salva
 }
 
 
-export default { addItem, getItems, updateItem, removeItem };
-
-
+export default { addItem, getItems, updateItem, removeItem };//possibilita o uso das funções em outros lugares
+```
+---
+### API
+```typescript
 //API
 import todo from "./core.ts";
 
