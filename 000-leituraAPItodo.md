@@ -123,10 +123,12 @@ const server = Bun.serve({
     },
   },
 
+  //executa caso não seja acessada nenhuma rota
   async fetch(req) {
-    return new Response(`Not Found`, { status: 404 });
+    return new Response(`Not Found`, { status: 404 });//resposta da função
   },
 });
 
+//avisa que o servidor esta funcionando
 console.log(`Server running at http://localhost:${server.port}`);
 ```
